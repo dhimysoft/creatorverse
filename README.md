@@ -4,7 +4,7 @@ Submitted by: **Dhimy Jean**
 
 About this web app: **Creatorverse is a full CRUD React app for curating the content creators worth following. Creators are stored in a Supabase Postgres database and rendered as a responsive card grid. You can browse every creator, open a details page at its own unique URL, visit the creator's real channel, and add, edit, or delete entries — all backed by async/await calls to Supabase.**
 
-Time spent: **X** hours
+Time spent: **12** hours
 
 ## Required Features
 
@@ -42,9 +42,9 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented required features:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='walkthrough.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-GIF created with ...
+GIF created with [LiceCap](https://www.cockos.com/licecap/).
 
 ## Notes
 

@@ -1,10 +1,10 @@
-// Shows one creator card on the homepage.
+// Displays one creator card on the homepage.
 
 import { Link } from "react-router-dom";
 import Icon from "./Icon";
 
-// Placeholder used when a creator has no image, so every card stays the
-// same size and the grid lines up.
+// Used when a creator does not have an image.
+// It keeps all creator cards the same size.
 const FALLBACK_IMAGE =
   "data:image/svg+xml;utf8," +
   encodeURIComponent(
@@ -25,7 +25,7 @@ export default function CreatorCard({ creator }) {
           src={imageurl || FALLBACK_IMAGE}
           alt={name}
           loading="lazy"
-          // Show the placeholder if the image link is broken.
+          // If the image URL does not work, show the placeholder instead.
           onError={(event) => {
             event.currentTarget.src = FALLBACK_IMAGE;
           }}
@@ -44,13 +44,13 @@ export default function CreatorCard({ creator }) {
             View details
           </Link>
 
-          {/* Step 8a: users can edit a creator straight from the card. */}
+          {/* Step 8a: users can edit a creator directly from the card. */}
           <Link className="btn btn-ghost btn-sm" to={`/creator/${id}/edit`}>
             <Icon name="pencil" size={15} />
             Edit
           </Link>
 
-          {/* Link to the creator's real channel, opened in a new tab. */}
+          {/* Opens the creator's channel in a new tab. */}
           <a
             className="link-external"
             href={url}

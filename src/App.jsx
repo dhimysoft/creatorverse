@@ -1,39 +1,35 @@
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
-import ShowCreators from './pages/ShowCreators'
-import ViewCreator from './pages/ViewCreator'
-import AddCreator from './pages/AddCreator'
-import EditCreator from './pages/EditCreator'
-import NotFound from './pages/NotFound'
-import './App.css'
+// App.jsx - Connects each URL to the page that should render for it.
+import { Routes, Route } from "react-router-dom";
 
-export default function App() {
+import Layout from "./components/Layout.jsx";
+
+import ShowCreators from "./pages/ShowCreators.jsx";
+import ViewCreator from "./pages/ViewCreator.jsx";
+import AddCreator from "./pages/AddCreator.jsx";
+import EditCreator from "./pages/EditCreator.jsx";
+import NotFound from "./pages/NotFound.jsx";
+
+import "./App.css";
+
+function App() {
   return (
-    <BrowserRouter>
-      <div className="app">
-        <nav className="navbar">
-          <Link className="navbar__brand" to="/">
-            <span className="navbar__mark">✦</span> Creatorverse
-          </Link>
-          <div className="navbar__links">
-            <Link to="/">All creators</Link>
-            <Link className="btn btn--primary btn--sm" to="/new">
-              Add a creator
-            </Link>
-          </div>
-        </nav>
+    <Routes>
+      {/* Every page renders inside Layout, so the navbar and footer are
+          written once instead of being repeated on each page. */}
+      <Route element={<Layout />}>
+        <Route path="/" element={<ShowCreators />} />
+        <Route path="/new" element={<AddCreator />} />
 
-        <Routes>
-          <Route path="/" element={<ShowCreators />} />
-          <Route path="/new" element={<AddCreator />} />
-          <Route path="/creator/:id" element={<ViewCreator />} />
-          <Route path="/creator/:id/edit" element={<EditCreator />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        {/* :id is a URL parameter. It gives every creator its own address,
+            like /creator/19, which the page reads with useParams(). */}
+        <Route path="/creator/:id" element={<ViewCreator />} />
+        <Route path="/creator/:id/edit" element={<EditCreator />} />
 
-        <footer className="footer">
-          <p>Creatorverse · CodePath WEB103 Prework</p>
-        </footer>
-      </div>
-    </BrowserRouter>
-  )
+        {/* "*" matches anything the routes above did not. */}
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+  );
 }
+
+export default App;

@@ -1,5 +1,4 @@
-// Shared form used by both the Add and the Edit page.
-// Each page passes its own onSubmit, so the fields are only written once.
+// Form used on both the Add Creator and Edit Creator pages.
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -10,7 +9,7 @@ export default function CreatorForm({
   cancelTo = "/",
   onSubmit,
 }) {
-  // The Edit page passes initialValues, the Add page starts empty.
+  // Edit starts with the creator's saved information. Add starts with empty fields.
   const [form, setForm] = useState({
     name: initialValues?.name ?? "",
     url: initialValues?.url ?? "",
@@ -21,7 +20,7 @@ export default function CreatorForm({
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
-  // One handler for all the inputs, matched by each input's name.
+  // Update the correct form field when the user types.
   function handleChange(event) {
     const { name, value } = event.target;
 
@@ -29,12 +28,12 @@ export default function CreatorForm({
   }
 
   async function handleSubmit(event) {
-    // Stop the browser reloading the page.
+    // Prevent the page from reloading when the form is submitted.
     event.preventDefault();
 
     setError("");
 
-    // Stops a double submit while the save is running.
+    // Disable the button while the creator is being saved.
     setSaving(true);
 
     try {
@@ -43,11 +42,11 @@ export default function CreatorForm({
         url: form.url.trim(),
         description: form.description.trim(),
 
-        // The image is optional, so an empty box is saved as null.
+        // Save an empty optional image field as null.
         imageurl: form.imageurl.trim() || null,
       });
     } catch (submitError) {
-      // Keep what the user typed so a failed save does not lose their work.
+      // Keep the form information if saving fails.
       setError(submitError.message || "Something went wrong. Please try again.");
       setSaving(false);
     }
@@ -70,7 +69,7 @@ export default function CreatorForm({
       <label className="field">
         <span className="field-label">Channel or page URL</span>
 
-        {/* type="url" makes the browser check this looks like a real link. */}
+        {/* Checks that the user enters a valid URL. */}
         <input
           name="url"
           type="url"
@@ -108,7 +107,7 @@ export default function CreatorForm({
         />
       </label>
 
-      {/* Show any database error right above the buttons. */}
+      {/* Show a database error above the form buttons. */}
       {error && <p className="alert alert-error">{error}</p>}
 
       <div className="creator-form-actions">

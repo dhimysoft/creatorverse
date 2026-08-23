@@ -8,14 +8,14 @@ import Icon from "../components/Icon";
 export default function AddCreator() {
   const navigate = useNavigate();
 
-  // CreatorForm calls this with whatever was typed into the form.
+  // Save the new creator to Supabase.
   async function handleAdd(values) {
     const { error } = await supabase.from("creators").insert([values]);
 
-    // Throwing lets CreatorForm show the error without clearing the form.
+    // Let CreatorForm display the error if the save fails.
     if (error) throw new Error(error.message);
 
-    // The new creator now shows on the homepage.
+    // Return to the homepage after the creator is saved.
     navigate("/");
   }
 

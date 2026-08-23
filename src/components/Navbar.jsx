@@ -1,4 +1,4 @@
-// Top navigation bar, shown on every page.
+// Navigation bar shown on every page.
 
 import { Link } from "react-router-dom";
 import Icon from "./Icon";

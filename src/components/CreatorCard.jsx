@@ -50,6 +50,13 @@ export default function CreatorCard({ creator }) {
             View details
           </Link>
 
+          {/* Step 8a of the prework asks for an edit link on the card itself,
+              not only on the details page. */}
+          <Link className="btn btn-ghost btn-sm" to={`/creator/${id}/edit`}>
+            <Icon name="pencil" size={15} />
+            Edit
+          </Link>
+
           {/* The creator's real channel. target="_blank" opens a new tab, and
               rel="noopener noreferrer" is the safety pair that goes with it. */}
           <a

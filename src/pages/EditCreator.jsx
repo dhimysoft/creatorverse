@@ -19,6 +19,9 @@ export default function EditCreator() {
   // Store an error message.
   const [error, setError] = useState("");
 
+  // Track whether a delete is in flight.
+  const [deleting, setDeleting] = useState(false);
+
   // Fetch before rendering the form, because the boxes have to open already
   // filled in rather than empty.
   useEffect(() => {
@@ -55,6 +58,31 @@ export default function EditCreator() {
 
     // Back to the details page, where the change is visible straight away.
     navigate(`/creator/${id}`);
+  }
+
+  async function handleDelete() {
+    // Ask first. A delete cannot be undone.
+    const confirmed = window.confirm(
+      `Delete ${creator.name}? This cannot be undone.`,
+    );
+
+    if (!confirmed) return;
+
+    setDeleting(true);
+
+    const { error: deleteError } = await supabase
+      .from("creators")
+      .delete()
+      .eq("id", id);
+
+    if (deleteError) {
+      setError(deleteError.message);
+      setDeleting(false);
+      return;
+    }
+
+    // Back to the homepage, where the card is now gone.
+    navigate("/");
   }
 
   if (loading) {
@@ -97,6 +125,28 @@ export default function EditCreator() {
         cancelTo={`/creator/${id}`}
         onSubmit={handleUpdate}
       />
+
+      {/* Step 9 of the prework puts a delete button on this page. It is kept
+          apart from the form so that "save" and "destroy" are never adjacent
+          buttons someone can hit by muscle memory. */}
+      <section className="danger-zone">
+        <h2>Delete this creator</h2>
+
+        <p>
+          Removes {creator.name} from the Creatorverse for good. This cannot be
+          undone.
+        </p>
+
+        <button
+          className="btn btn-danger"
+          type="button"
+          onClick={handleDelete}
+          disabled={deleting}
+        >
+          <Icon name="trash" size={16} />
+          {deleting ? "Deleting…" : "Delete creator"}
+        </button>
+      </section>
     </main>
   );
 }

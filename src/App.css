@@ -401,6 +401,27 @@
   margin-top: 0.25rem;
 }
 
+/* ---------- danger zone ---------- */
+/* Sits well below the form so "save" and "delete" are never neighbours. */
+.danger-zone {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 107, 107, 0.35);
+  border-radius: var(--radius);
+  background: rgba(255, 107, 107, 0.06);
+}
+
+.danger-zone h2 {
+  font-size: 1.05rem;
+  color: #ffb3b3;
+}
+
+.danger-zone p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  margin: 0 0 1.1rem;
+}
+
 /* ---------- states ---------- */
 .state {
   color: var(--text-muted);

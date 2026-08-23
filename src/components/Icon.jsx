@@ -1,6 +1,4 @@
-// A small set of SVG line icons used around the app.
-// I used SVG instead of emoji so the icons pick up the text colour and look
-// the same in every browser.
+// Reusable SVG icons used throughout the app.
 
 const PATHS = {
   sparkle: (
@@ -51,6 +49,7 @@ const PATHS = {
 };
 
 export default function Icon({ name, size = 18, className = "" }) {
+  // Use the grid icon if an icon name is missing.
   const path = PATHS[name] || PATHS.grid;
 
   return (
@@ -64,8 +63,7 @@ export default function Icon({ name, size = 18, className = "" }) {
       strokeWidth="1.7"
       strokeLinecap="round"
       strokeLinejoin="round"
-      // Hidden from screen readers because every icon sits next to a label
-      // that already says the same thing.
+      // Screen readers do not need to read an icon next to labeled text.
       aria-hidden="true"
       focusable="false"
     >

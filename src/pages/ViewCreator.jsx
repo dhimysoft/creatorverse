@@ -1,4 +1,4 @@
-// Details page for one creator, with Edit and Delete.
+// Details page for one creator, with Edit and Delete options.
 
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -6,7 +6,7 @@ import { supabase } from "../client";
 import Icon from "../components/Icon";
 
 export default function ViewCreator() {
-  // The :id in the URL tells us which creator to load.
+  // Get the creator ID from the URL.
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -15,17 +15,14 @@ export default function ViewCreator() {
   const [error, setError] = useState("");
   const [deleting, setDeleting] = useState(false);
 
-  // Load this creator from Supabase when the page opens.
+  // Load the selected creator from Supabase.
   useEffect(() => {
     async function getCreator() {
       const { data, error: fetchError } = await supabase
         .from("creators")
         .select("*")
-
         .eq("id", id)
-
-        // maybeSingle gives back null instead of an error if the id is not
-        // in the table, which is easier to show to the user.
+        // Return null if the creator ID is not found.
         .maybeSingle();
 
       if (fetchError) {
@@ -43,7 +40,7 @@ export default function ViewCreator() {
   }, [id]);
 
   async function handleDelete() {
-    // Ask first, since deleting cannot be undone.
+    // Ask for confirmation because deleting cannot be undone.
     const confirmed = window.confirm(
       `Delete ${creator.name}? This cannot be undone.`,
     );
@@ -63,7 +60,7 @@ export default function ViewCreator() {
       return;
     }
 
-    // Send the user home once the creator is gone.
+    // Return home after the creator is deleted.
     navigate("/");
   }
 
@@ -96,7 +93,7 @@ export default function ViewCreator() {
       </Link>
 
       <article className="detail">
-        {/* Only show the image if this creator has one. */}
+        {/* Only show an image when the creator has one. */}
         {creator.imageurl && (
           <div className="detail-media">
             <img src={creator.imageurl} alt={creator.name} />

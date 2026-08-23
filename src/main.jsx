@@ -1,4 +1,4 @@
-// main.jsx
+// Starts the app and turns on routing.
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -6,9 +6,8 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 
-// Vite only exposes variables that start with VITE_, and it reads them from
-// .env at build time. Missing either one means createClient() cannot be built,
-// so say which one is missing instead of rendering a blank white page.
+// Without the Supabase keys the app cannot connect, so show what is missing
+// instead of a blank white page.
 const missing = [
   ["VITE_SUPABASE_URL", import.meta.env.VITE_SUPABASE_URL],
   ["VITE_SUPABASE_ANON_KEY", import.meta.env.VITE_SUPABASE_ANON_KEY],
@@ -40,10 +39,8 @@ if (missing.length > 0) {
     </div>,
   );
 } else {
-  // Start the React app.
   root.render(
     <StrictMode>
-      {/* Enable routing in the app. */}
       <BrowserRouter>
         <App />
       </BrowserRouter>

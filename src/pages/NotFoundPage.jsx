@@ -1,4 +1,4 @@
-// pages/NotFoundPage.jsx
+// 404 page for any URL that does not match a route.
 
 import { Link } from "react-router-dom";
 import Icon from "../components/Icon";

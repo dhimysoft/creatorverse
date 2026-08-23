@@ -402,7 +402,7 @@
 }
 
 /* ---------- danger zone ---------- */
-/* Sits well below the form so "save" and "delete" are never neighbours. */
+/* Sits below the form so Save and Delete are not next to each other. */
 .danger-zone {
   margin-top: 2.5rem;
   padding: 1.5rem;
@@ -499,15 +499,14 @@
 }
 
 /* ---------- icons ---------- */
-/* Icons sit next to a text label, so they align to it rather than to the box.
-   flex-shrink keeps a 16px icon from being squeezed by a long label. */
+/* Stops a small icon from being squashed by a long label next to it. */
 .icon {
   flex-shrink: 0;
 }
 
 /* ---------- loading skeletons ---------- */
-/* Placeholder shapes in the size of the real content, so the page does not
-   jump when the data lands. */
+/* Placeholder shapes the same size as the real content, so the page does
+   not jump when the data arrives. */
 @keyframes skeleton-pulse {
   0%,
   100% {

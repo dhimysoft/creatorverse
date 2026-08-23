@@ -1,8 +1,5 @@
-// components/CreatorForm.jsx
-
-// The add page and the edit page ask for exactly the same four fields. Each
-// one passes its own onSubmit, so the inputs, the validation and the error
-// handling are written here once rather than twice.
+// Shared form used by both the Add and the Edit page.
+// Each page passes its own onSubmit, so the fields are only written once.
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -13,8 +10,7 @@ export default function CreatorForm({
   cancelTo = "/",
   onSubmit,
 }) {
-  // Store the four fields. On the edit page initialValues arrives filled in;
-  // on the add page it is undefined, so ?? falls back to an empty box.
+  // The Edit page passes initialValues, the Add page starts empty.
   const [form, setForm] = useState({
     name: initialValues?.name ?? "",
     url: initialValues?.url ?? "",
@@ -22,14 +18,10 @@ export default function CreatorForm({
     imageurl: initialValues?.imageurl ?? "",
   });
 
-  // Store an error from the database.
   const [error, setError] = useState("");
-
-  // Track whether a save is in flight.
   const [saving, setSaving] = useState(false);
 
-  // One handler for every input. event.target.name matches the key in state,
-  // so [name] updates only the field being typed into.
+  // One handler for all the inputs, matched by each input's name.
   function handleChange(event) {
     const { name, value } = event.target;
 
@@ -42,7 +34,7 @@ export default function CreatorForm({
 
     setError("");
 
-    // Disable the button so a slow save cannot be sent twice.
+    // Stops a double submit while the save is running.
     setSaving(true);
 
     try {
@@ -51,13 +43,11 @@ export default function CreatorForm({
         url: form.url.trim(),
         description: form.description.trim(),
 
-        // The imageurl column allows NULL, so an empty box is stored as null
-        // rather than as an empty string.
+        // The image is optional, so an empty box is saved as null.
         imageurl: form.imageurl.trim() || null,
       });
     } catch (submitError) {
-      // Keep what the user typed on screen. Wiping a filled-in form because
-      // the network blinked is the fastest way to lose their work.
+      // Keep what the user typed so a failed save does not lose their work.
       setError(submitError.message || "Something went wrong. Please try again.");
       setSaving(false);
     }
@@ -80,8 +70,7 @@ export default function CreatorForm({
       <label className="field">
         <span className="field-label">Channel or page URL</span>
 
-        {/* type="url" makes the browser check it looks like a real address
-            before the form is allowed to submit. */}
+        {/* type="url" makes the browser check this looks like a real link. */}
         <input
           name="url"
           type="url"
@@ -119,8 +108,7 @@ export default function CreatorForm({
         />
       </label>
 
-      {/* Show the database error above the buttons, where the user is looking
-          when they press save. */}
+      {/* Show any database error right above the buttons. */}
       {error && <p className="alert alert-error">{error}</p>}
 
       <div className="creator-form-actions">

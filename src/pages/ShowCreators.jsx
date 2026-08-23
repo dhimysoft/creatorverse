@@ -1,4 +1,4 @@
-// pages/ShowCreators.jsx
+// Homepage: loads every creator and shows them as cards.
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -7,26 +7,19 @@ import CreatorCard from "../components/CreatorCard";
 import Icon from "../components/Icon";
 
 export default function ShowCreators() {
-  // Store the creators.
   const [creators, setCreators] = useState([]);
-
-  // Track whether the creators are loading.
   const [loading, setLoading] = useState(true);
-
-  // Store an error message.
   const [error, setError] = useState("");
 
-  // Load the creators when the page opens.
+  // Load creators from Supabase when the page opens.
   useEffect(() => {
-    // useEffect itself must not be async, so the async function is declared
-    // inside it and called on the last line.
+    // useEffect cannot be async itself, so the function goes inside it.
     async function getCreators() {
       const { data, error: fetchError } = await supabase
         .from("creators")
         .select("*")
 
-        // Newest first, so a creator you just added is at the top rather than
-        // somewhere down the grid.
+        // Newest first, so a creator you just added shows at the top.
         .order("created_at", { ascending: false });
 
       if (fetchError) {
@@ -53,7 +46,7 @@ export default function ShowCreators() {
         </p>
 
         <div className="hero-actions">
-          {/* Jumps down to the grid further along this same page. */}
+          {/* Jumps down to the grid below. */}
           <a className="btn btn-primary" href="#creators">
             <Icon name="grid" size={17} />
             View all creators
@@ -77,10 +70,8 @@ export default function ShowCreators() {
           )}
         </div>
 
-        {/* was: <p>Loading creators…</p> — two words in the corner of an empty
-            page, which reads as "broken" for the second it is on screen.
-            Placeholder tiles in the shape of the real cards say "your creators
-            are on their way" instead. */}
+        {/* Placeholder cards while the data loads, so the page does not look
+            broken for a second. */}
         {loading && (
           <section className="creator-grid">
             {[0, 1, 2].map((n) => (
@@ -89,12 +80,11 @@ export default function ShowCreators() {
           </section>
         )}
 
-        {/* Show an error message. */}
         {!loading && error && (
           <p className="alert alert-error">Could not load creators: {error}</p>
         )}
 
-        {/* Only shown once loading finished and the table really is empty. */}
+        {/* Empty state, shown only when there are really no creators yet. */}
         {!loading && !error && creators.length === 0 && (
           <div className="state state-empty">
             <h3>No creators yet</h3>
@@ -114,7 +104,6 @@ export default function ShowCreators() {
         {!loading && !error && creators.length > 0 && (
           <section className="creator-grid">
             {creators.map((creator) => (
-              // key = the unique id React needs to tell list items apart.
               <CreatorCard key={creator.id} creator={creator} />
             ))}
           </section>

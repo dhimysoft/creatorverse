@@ -1,10 +1,8 @@
-// client.js
-
-// Creates the one Supabase connection that every page imports.
+// Connects the app to Supabase. Every page imports this.
 
 import { createClient } from "@supabase/supabase-js";
 
-// Read from .env so the keys are never written into the source code.
+// Keys come from .env so they stay out of the code.
 const URL = import.meta.env.VITE_SUPABASE_URL;
 const API_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 

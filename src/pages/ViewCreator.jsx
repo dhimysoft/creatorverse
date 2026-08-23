@@ -1,4 +1,4 @@
-// pages/ViewCreator.jsx
+// Details page for one creator, with Edit and Delete.
 
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -6,36 +6,26 @@ import { supabase } from "../client";
 import Icon from "../components/Icon";
 
 export default function ViewCreator() {
-  // Read the :id out of the URL, e.g. 19 from /creator/19.
+  // The :id in the URL tells us which creator to load.
   const { id } = useParams();
-
-  // Lets us send the user to another page from inside a function.
   const navigate = useNavigate();
 
-  // Store the creator being viewed.
   const [creator, setCreator] = useState(null);
-
-  // Track whether the creator is loading.
   const [loading, setLoading] = useState(true);
-
-  // Store an error message.
   const [error, setError] = useState("");
-
-  // Track whether a delete is in flight.
   const [deleting, setDeleting] = useState(false);
 
-  // Load this one creator when the page opens.
+  // Load this creator from Supabase when the page opens.
   useEffect(() => {
     async function getCreator() {
       const { data, error: fetchError } = await supabase
         .from("creators")
         .select("*")
 
-        // Only the row whose id matches the URL.
         .eq("id", id)
 
-        // maybeSingle returns one row, or null for a URL like /creator/999.
-        // single() would throw instead, which is harder to show to the user.
+        // maybeSingle gives back null instead of an error if the id is not
+        // in the table, which is easier to show to the user.
         .maybeSingle();
 
       if (fetchError) {
@@ -53,7 +43,7 @@ export default function ViewCreator() {
   }, [id]);
 
   async function handleDelete() {
-    // Ask first. A delete cannot be undone, and the button sits next to Edit.
+    // Ask first, since deleting cannot be undone.
     const confirmed = window.confirm(
       `Delete ${creator.name}? This cannot be undone.`,
     );
@@ -73,7 +63,7 @@ export default function ViewCreator() {
       return;
     }
 
-    // Back to the homepage, where the card is now gone.
+    // Send the user home once the creator is gone.
     navigate("/");
   }
 
@@ -85,7 +75,6 @@ export default function ViewCreator() {
     );
   }
 
-  // Show an error message.
   if (error) {
     return (
       <main className="page">
@@ -107,7 +96,7 @@ export default function ViewCreator() {
       </Link>
 
       <article className="detail">
-        {/* Only render the image block when this creator actually has one. */}
+        {/* Only show the image if this creator has one. */}
         {creator.imageurl && (
           <div className="detail-media">
             <img src={creator.imageurl} alt={creator.name} />

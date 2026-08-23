@@ -1,16 +1,6 @@
-// components/Icon.jsx
-//
-// A small set of line icons, drawn as inline SVG.
-//
-// Why not the ✦ and ↗ characters this page used before? Those are glyphs from
-// the operating system's font: they arrive in someone else's weight, they
-// render differently on Windows, macOS and Android, and next to a 15px label
-// they sit on the wrong baseline. A row of stray symbols standing in for icons
-// is the usual giveaway that a page was assembled rather than designed.
-//
-// These take their colour from the text around them (`stroke="currentColor"`),
-// so one icon works in the navbar, on a card and inside a red delete button
-// without a second copy in a different colour.
+// A small set of SVG line icons used around the app.
+// I used SVG instead of emoji so the icons pick up the text colour and look
+// the same in every browser.
 
 const PATHS = {
   sparkle: (
@@ -74,8 +64,8 @@ export default function Icon({ name, size = 18, className = "" }) {
       strokeWidth="1.7"
       strokeLinecap="round"
       strokeLinejoin="round"
-      // Decorative: every icon here sits next to a text label that already
-      // says the same thing, so a screen reader repeating it would be noise.
+      // Hidden from screen readers because every icon sits next to a label
+      // that already says the same thing.
       aria-hidden="true"
       focusable="false"
     >

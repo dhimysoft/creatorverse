@@ -1,4 +1,4 @@
-// pages/EditCreator.jsx
+// Page for editing or deleting one creator.
 
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -10,20 +10,12 @@ export default function EditCreator() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Store the creator being edited.
   const [creator, setCreator] = useState(null);
-
-  // Track whether the creator is loading.
   const [loading, setLoading] = useState(true);
-
-  // Store an error message.
   const [error, setError] = useState("");
-
-  // Track whether a delete is in flight.
   const [deleting, setDeleting] = useState(false);
 
-  // Fetch before rendering the form, because the boxes have to open already
-  // filled in rather than empty.
+  // Load the creator first so the form opens already filled in.
   useEffect(() => {
     async function getCreator() {
       const { data, error: fetchError } = await supabase
@@ -51,17 +43,17 @@ export default function EditCreator() {
       .from("creators")
       .update(values)
 
-      // Without .eq this would overwrite every row in the table.
+      // Without .eq this would update every row in the table.
       .eq("id", id);
 
     if (updateError) throw new Error(updateError.message);
 
-    // Back to the details page, where the change is visible straight away.
+    // Back to the details page to see the change.
     navigate(`/creator/${id}`);
   }
 
   async function handleDelete() {
-    // Ask first. A delete cannot be undone.
+    // Ask first, since deleting cannot be undone.
     const confirmed = window.confirm(
       `Delete ${creator.name}? This cannot be undone.`,
     );
@@ -81,7 +73,7 @@ export default function EditCreator() {
       return;
     }
 
-    // Back to the homepage, where the card is now gone.
+    // Send the user home once the creator is gone.
     navigate("/");
   }
 
@@ -93,7 +85,6 @@ export default function EditCreator() {
     );
   }
 
-  // Show an error message.
   if (error) {
     return (
       <main className="page page-narrow">
@@ -118,7 +109,7 @@ export default function EditCreator() {
 
       <p className="page-lead">Update the details for {creator.name}.</p>
 
-      {/* initialValues is what fills the boxes before the user types. */}
+      {/* initialValues fills the form with the creator's current details. */}
       <CreatorForm
         initialValues={creator}
         submitLabel="Save changes"
@@ -126,9 +117,8 @@ export default function EditCreator() {
         onSubmit={handleUpdate}
       />
 
-      {/* Step 9 of the prework puts a delete button on this page. It is kept
-          apart from the form so that "save" and "destroy" are never adjacent
-          buttons someone can hit by muscle memory. */}
+      {/* Step 9: the delete button lives on the edit page. I kept it away
+          from Save so it is harder to hit by accident. */}
       <section className="danger-zone">
         <h2>Delete this creator</h2>
 

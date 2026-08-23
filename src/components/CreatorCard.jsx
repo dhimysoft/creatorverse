@@ -1,13 +1,10 @@
-// components/CreatorCard.jsx
+// Shows one creator card on the homepage.
 
 import { Link } from "react-router-dom";
 import Icon from "./Icon";
 
-// A grey "No image" tile drawn as SVG and stored as a data URL. A creator with
-// no picture still gets a card the same height as the others, so one missing
-// image does not knock a row of the grid out of alignment. It sits outside the
-// component because it never changes and would otherwise be rebuilt on every
-// render.
+// Placeholder used when a creator has no image, so every card stays the
+// same size and the grid lines up.
 const FALLBACK_IMAGE =
   "data:image/svg+xml;utf8," +
   encodeURIComponent(
@@ -19,19 +16,16 @@ const FALLBACK_IMAGE =
   );
 
 export default function CreatorCard({ creator }) {
-  // Pull the four database columns off the row this card was handed.
   const { id, name, url, description, imageurl } = creator;
 
   return (
     <article className="creator-card">
       <Link className="creator-card-media" to={`/creator/${id}`}>
         <img
-          // imageurl is null when the creator has no picture.
           src={imageurl || FALLBACK_IMAGE}
           alt={name}
           loading="lazy"
-          // Runs when a link is dead, so a broken URL shows the placeholder
-          // rather than the browser's torn-image icon.
+          // Show the placeholder if the image link is broken.
           onError={(event) => {
             event.currentTarget.src = FALLBACK_IMAGE;
           }}
@@ -50,15 +44,13 @@ export default function CreatorCard({ creator }) {
             View details
           </Link>
 
-          {/* Step 8a of the prework asks for an edit link on the card itself,
-              not only on the details page. */}
+          {/* Step 8a: users can edit a creator straight from the card. */}
           <Link className="btn btn-ghost btn-sm" to={`/creator/${id}/edit`}>
             <Icon name="pencil" size={15} />
             Edit
           </Link>
 
-          {/* The creator's real channel. target="_blank" opens a new tab, and
-              rel="noopener noreferrer" is the safety pair that goes with it. */}
+          {/* Link to the creator's real channel, opened in a new tab. */}
           <a
             className="link-external"
             href={url}

@@ -1,7 +1,7 @@
--- Run this once if your `creators` table was created with `imageurl text not null`.
--- The prework treats imageURL as optional, so the column must allow NULL.
+-- Run this once if imageurl was originally set as required.
+-- Image URLs are optional, so this column must allow NULL values.
 
 alter table creators alter column imageurl drop not null;
 
--- Normalize any rows that stored a blank string while the column was NOT NULL.
+-- Replace empty image URLs with NULL values.
 update creators set imageurl = null where imageurl = '';

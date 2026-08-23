@@ -1,6 +1,6 @@
--- Creatorverse seed data
--- Run this once in the Supabase SQL Editor to populate the `creators` table.
--- Columns used: name, url, description, imageurl
+-- Adds sample creators to the database.
+-- Run once in the Supabase SQL Editor.
+-- Uses the same fields created in the creators table.
 
 insert into creators (name, url, description, imageurl) values
   (

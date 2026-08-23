@@ -43,6 +43,9 @@
 }
 
 .navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--text);
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -181,14 +184,18 @@
 }
 
 .back-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   color: var(--text-muted);
   font-size: 0.92rem;
   margin-bottom: 0.5rem;
 }
 
 .link-external {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-weight: 600;
   color: var(--cyan-300);
 }
@@ -442,14 +449,70 @@
 }
 
 /* ---------- footer ---------- */
-.footer {
+.site-footer {
   border-top: 1px solid var(--border);
-  padding: 1.5rem 1.25rem;
+  padding: 2rem 1.25rem 2.5rem;
   text-align: center;
-  color: var(--text-muted);
-  font-size: 0.85rem;
 }
 
-.footer p {
+.site-footer p {
   margin: 0;
+}
+
+.site-footer-brand {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+
+.site-footer-tagline {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  margin-top: 0.35rem !important;
+}
+
+.site-footer-legal {
+  color: #6b7ca6;
+  font-size: 0.82rem;
+  margin-top: 0.75rem !important;
+}
+
+/* ---------- icons ---------- */
+/* Icons sit next to a text label, so they align to it rather than to the box.
+   flex-shrink keeps a 16px icon from being squeezed by a long label. */
+.icon {
+  flex-shrink: 0;
+}
+
+/* ---------- loading skeletons ---------- */
+/* Placeholder shapes in the size of the real content, so the page does not
+   jump when the data lands. */
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+.creator-card-skeleton,
+.detail-skeleton,
+.creator-form-skeleton {
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.creator-card-skeleton {
+  min-height: 320px;
+}
+
+.detail-skeleton {
+  min-height: 340px;
+  margin-top: 1.25rem;
+}
+
+.creator-form-skeleton {
+  min-height: 520px;
 }

@@ -1,11 +1,13 @@
-// CreatorCard.jsx - A reusable card for ONE creator.
-// ShowCreators renders many of these with .map().
-import { Link } from "react-router-dom";
+// components/CreatorCard.jsx
 
-// A grey "No image" tile drawn as an SVG and stored as a data URL, so a
-// creator with no picture still gets a card the same size as the others.
-// It lives outside the component because it never changes and would
-// otherwise be rebuilt on every render.
+import { Link } from "react-router-dom";
+import Icon from "./Icon";
+
+// A grey "No image" tile drawn as SVG and stored as a data URL. A creator with
+// no picture still gets a card the same height as the others, so one missing
+// image does not knock a row of the grid out of alignment. It sits outside the
+// component because it never changes and would otherwise be rebuilt on every
+// render.
 const FALLBACK_IMAGE =
   "data:image/svg+xml;utf8," +
   encodeURIComponent(
@@ -16,19 +18,20 @@ const FALLBACK_IMAGE =
      </svg>`,
   );
 
-function CreatorCard({ creator }) {
-  // creator = the data ShowCreators hands to this card (a "prop").
+export default function CreatorCard({ creator }) {
+  // Pull the four database columns off the row this card was handed.
   const { id, name, url, description, imageurl } = creator;
 
   return (
     <article className="creator-card">
       <Link className="creator-card-media" to={`/creator/${id}`}>
         <img
-          src={imageurl || FALLBACK_IMAGE} // || falls back when imageurl is null or ""
+          // imageurl is null when the creator has no picture.
+          src={imageurl || FALLBACK_IMAGE}
           alt={name}
           loading="lazy"
-          // Runs if the link is dead, so a broken URL shows the placeholder
-          // instead of a torn-image icon.
+          // Runs when a link is dead, so a broken URL shows the placeholder
+          // rather than the browser's torn-image icon.
           onError={(event) => {
             event.currentTarget.src = FALLBACK_IMAGE;
           }}
@@ -43,26 +46,23 @@ function CreatorCard({ creator }) {
         <p className="creator-card-desc">{description}</p>
 
         <div className="creator-card-actions">
-          <Link className="btn btn-ghost" to={`/creator/${id}`}>
+          <Link className="btn btn-ghost btn-sm" to={`/creator/${id}`}>
             View details
           </Link>
 
-          {/* The creator's real channel. target="_blank" opens a new tab and
+          {/* The creator's real channel. target="_blank" opens a new tab, and
               rel="noopener noreferrer" is the safety pair that goes with it. */}
-          {url && (
-            <a
-              className="link-external"
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Visit channel ↗
-            </a>
-          )}
+          <a
+            className="link-external"
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit channel
+            <Icon name="external" size={15} />
+          </a>
         </div>
       </div>
     </article>
   );
 }
-
-export default CreatorCard; // export so ShowCreators can import it

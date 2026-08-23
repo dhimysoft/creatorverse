@@ -1,27 +1,33 @@
-// ShowCreators.jsx - The home page. Loads every creator and displays them.
+// pages/ShowCreators.jsx
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { supabase } from "../client";
+import CreatorCard from "../components/CreatorCard";
+import Icon from "../components/Icon";
 
-import { supabase } from "../client.js";
-import CreatorCard from "../components/CreatorCard.jsx";
-
-function ShowCreators() {
-  // Stores the creators and the request status.
+export default function ShowCreators() {
+  // Store the creators.
   const [creators, setCreators] = useState([]);
+
+  // Track whether the creators are loading.
   const [loading, setLoading] = useState(true);
+
+  // Store an error message.
   const [error, setError] = useState("");
 
-  // Loads the creators when the page opens.
+  // Load the creators when the page opens.
   useEffect(() => {
-    // The async function is declared inside the effect because useEffect
-    // itself must not be async, then it is called on the line below.
-    async function fetchCreators() {
-      setLoading(true);
-
+    // useEffect itself must not be async, so the async function is declared
+    // inside it and called on the last line.
+    async function getCreators() {
       const { data, error: fetchError } = await supabase
         .from("creators")
         .select("*")
-        .order("created_at", { ascending: false }); // newest creator first
+
+        // Newest first, so a creator you just added is at the top rather than
+        // somewhere down the grid.
+        .order("created_at", { ascending: false });
 
       if (fetchError) {
         setError(fetchError.message);
@@ -32,8 +38,8 @@ function ShowCreators() {
       setLoading(false);
     }
 
-    fetchCreators();
-  }, []); // run once
+    getCreators();
+  }, []);
 
   return (
     <>
@@ -47,12 +53,14 @@ function ShowCreators() {
         </p>
 
         <div className="hero-actions">
-          {/* #creators jumps down to the grid on this same page. */}
+          {/* Jumps down to the grid further along this same page. */}
           <a className="btn btn-primary" href="#creators">
+            <Icon name="grid" size={17} />
             View all creators
           </a>
 
           <Link className="btn btn-outline" to="/new">
+            <Icon name="plus" size={17} />
             Add a creator
           </Link>
         </div>
@@ -69,13 +77,24 @@ function ShowCreators() {
           )}
         </div>
 
-        {loading && <p className="state">Loading creators...</p>}
+        {/* was: <p>Loading creators…</p> — two words in the corner of an empty
+            page, which reads as "broken" for the second it is on screen.
+            Placeholder tiles in the shape of the real cards say "your creators
+            are on their way" instead. */}
+        {loading && (
+          <section className="creator-grid">
+            {[0, 1, 2].map((n) => (
+              <div className="creator-card creator-card-skeleton" key={n} />
+            ))}
+          </section>
+        )}
 
+        {/* Show an error message. */}
         {!loading && error && (
           <p className="alert alert-error">Could not load creators: {error}</p>
         )}
 
-        {/* Shown only once loading finished and the table really is empty. */}
+        {/* Only shown once loading finished and the table really is empty. */}
         {!loading && !error && creators.length === 0 && (
           <div className="state state-empty">
             <h3>No creators yet</h3>
@@ -85,16 +104,17 @@ function ShowCreators() {
             </p>
 
             <Link className="btn btn-primary" to="/new">
+              <Icon name="plus" size={17} />
               Add a creator
             </Link>
           </div>
         )}
 
-        {/* Displays one card for each creator. */}
+        {/* Show one card for each creator. */}
         {!loading && !error && creators.length > 0 && (
           <section className="creator-grid">
             {creators.map((creator) => (
-              // key = the unique id React needs for each list item
+              // key = the unique id React needs to tell list items apart.
               <CreatorCard key={creator.id} creator={creator} />
             ))}
           </section>
@@ -103,5 +123,3 @@ function ShowCreators() {
     </>
   );
 }
-
-export default ShowCreators;

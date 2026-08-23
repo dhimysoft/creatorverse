@@ -1,16 +1,14 @@
-// main.jsx - Starts the React app and puts the router around it.
+// main.jsx
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-
 import "./index.css";
-import App from "./App.jsx";
-
-const root = createRoot(document.getElementById("root"));
+import App from "./App";
 
 // Vite only exposes variables that start with VITE_, and it reads them from
-// .env at build time. If either one is missing the Supabase client cannot be
-// created, so show a fixable message instead of a blank white screen.
+// .env at build time. Missing either one means createClient() cannot be built,
+// so say which one is missing instead of rendering a blank white page.
 const missing = [
   ["VITE_SUPABASE_URL", import.meta.env.VITE_SUPABASE_URL],
   ["VITE_SUPABASE_ANON_KEY", import.meta.env.VITE_SUPABASE_ANON_KEY],
@@ -18,12 +16,14 @@ const missing = [
   .filter(([, value]) => !value)
   .map(([name]) => name);
 
+const root = createRoot(document.getElementById("root"));
+
 if (missing.length > 0) {
   root.render(
     <div className="page page-narrow">
       <h1>Missing Supabase settings</h1>
 
-      <p>This app can't start until these are set in a .env file:</p>
+      <p>This app cannot start until these are set in a .env file:</p>
 
       <ul>
         {missing.map((name) => (
@@ -40,8 +40,10 @@ if (missing.length > 0) {
     </div>,
   );
 } else {
+  // Start the React app.
   root.render(
     <StrictMode>
+      {/* Enable routing in the app. */}
       <BrowserRouter>
         <App />
       </BrowserRouter>

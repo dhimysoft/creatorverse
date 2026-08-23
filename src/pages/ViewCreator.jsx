@@ -1,28 +1,42 @@
-// ViewCreator.jsx - Details page for ONE creator, plus Edit and Delete.
+// pages/ViewCreator.jsx
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { supabase } from "../client";
+import Icon from "../components/Icon";
 
-import { supabase } from "../client.js";
+export default function ViewCreator() {
+  // Read the :id out of the URL, e.g. 19 from /creator/19.
+  const { id } = useParams();
 
-function ViewCreator() {
-  const { id } = useParams(); // the :id from the URL, e.g. /creator/19
-  const navigate = useNavigate(); // lets us send the user to another page in code
+  // Lets us send the user to another page from inside a function.
+  const navigate = useNavigate();
 
+  // Store the creator being viewed.
   const [creator, setCreator] = useState(null);
+
+  // Track whether the creator is loading.
   const [loading, setLoading] = useState(true);
+
+  // Store an error message.
   const [error, setError] = useState("");
+
+  // Track whether a delete is in flight.
   const [deleting, setDeleting] = useState(false);
 
-  // Loads this one creator whenever the id in the URL changes.
+  // Load this one creator when the page opens.
   useEffect(() => {
-    async function fetchCreator() {
-      setLoading(true);
-
+    async function getCreator() {
       const { data, error: fetchError } = await supabase
         .from("creators")
         .select("*")
-        .eq("id", id) // only the row whose id matches the URL
-        .maybeSingle(); // returns one row, or null instead of throwing
+
+        // Only the row whose id matches the URL.
+        .eq("id", id)
+
+        // maybeSingle returns one row, or null for a URL like /creator/999.
+        // single() would throw instead, which is harder to show to the user.
+        .maybeSingle();
 
       if (fetchError) {
         setError(fetchError.message);
@@ -35,18 +49,16 @@ function ViewCreator() {
       setLoading(false);
     }
 
-    fetchCreator();
-  }, [id]); // re-run if the user opens a different creator
+    getCreator();
+  }, [id]);
 
   async function handleDelete() {
-    // Ask first, because a delete cannot be undone.
+    // Ask first. A delete cannot be undone, and the button sits next to Edit.
     const confirmed = window.confirm(
       `Delete ${creator.name}? This cannot be undone.`,
     );
 
-    if (!confirmed) {
-      return;
-    }
+    if (!confirmed) return;
 
     setDeleting(true);
 
@@ -61,24 +73,27 @@ function ViewCreator() {
       return;
     }
 
-    navigate("/"); // back to the homepage, where the card is now gone
+    // Back to the homepage, where the card is now gone.
+    navigate("/");
   }
 
   if (loading) {
     return (
       <main className="page">
-        <p className="state">Loading creator...</p>
+        <div className="detail detail-skeleton" />
       </main>
     );
   }
 
+  // Show an error message.
   if (error) {
     return (
       <main className="page">
         <p className="alert alert-error">{error}</p>
 
         <Link className="btn btn-ghost" to="/">
-          ← Back to all creators
+          <Icon name="arrowLeft" size={16} />
+          Back to all creators
         </Link>
       </main>
     );
@@ -87,7 +102,8 @@ function ViewCreator() {
   return (
     <main className="page">
       <Link className="back-link" to="/">
-        ← Back to all creators
+        <Icon name="arrowLeft" size={16} />
+        Back to all creators
       </Link>
 
       <article className="detail">
@@ -109,11 +125,13 @@ function ViewCreator() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Visit {creator.name}'s channel ↗
+            Visit {creator.name} on their channel
+            <Icon name="external" size={16} />
           </a>
 
           <div className="detail-actions">
             <Link className="btn btn-primary" to={`/creator/${id}/edit`}>
+              <Icon name="pencil" size={16} />
               Edit
             </Link>
 
@@ -123,7 +141,8 @@ function ViewCreator() {
               onClick={handleDelete}
               disabled={deleting}
             >
-              {deleting ? "Deleting..." : "Delete"}
+              <Icon name="trash" size={16} />
+              {deleting ? "Deleting…" : "Delete"}
             </button>
           </div>
         </div>
@@ -131,5 +150,3 @@ function ViewCreator() {
     </main>
   );
 }
-
-export default ViewCreator;

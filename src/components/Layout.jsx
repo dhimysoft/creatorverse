@@ -1,20 +1,29 @@
-// Layout.jsx - The frame every page sits inside: navbar on top, footer below.
+// components/Layout.jsx
+
 import { Outlet } from "react-router-dom";
+import Navbar from "./Navbar";
 
-import Navbar from "./Navbar.jsx";
-import Footer from "./Footer.jsx";
-
-function Layout() {
+export default function Layout() {
   return (
     <div className="app">
+      {/* Show the navigation bar at the top of every page. */}
       <Navbar />
 
-      {/* Outlet is where React Router drops whichever page matched the URL. */}
+      {/* Show the page that matches the current route. */}
       <Outlet />
 
-      <Footer />
+      <footer className="site-footer">
+        <p className="site-footer-brand">Creatorverse</p>
+
+        <p className="site-footer-tagline">
+          Five creators worth following, and room for the rest.
+        </p>
+
+        {/* Show the current year automatically. */}
+        <p className="site-footer-legal">
+          © {new Date().getFullYear()} Dhimy Jean · CodePath WEB103 Prework
+        </p>
+      </footer>
     </div>
   );
 }
-
-export default Layout;

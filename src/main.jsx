@@ -1,4 +1,4 @@
-// Starts the app and turns on routing.
+// Starts the React app and enables routing.
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -6,8 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 
-// Without the Supabase keys the app cannot connect, so show what is missing
-// instead of a blank white page.
+// Check that the required Supabase settings are available.
 const missing = [
   ["VITE_SUPABASE_URL", import.meta.env.VITE_SUPABASE_URL],
   ["VITE_SUPABASE_ANON_KEY", import.meta.env.VITE_SUPABASE_ANON_KEY],
@@ -18,6 +17,7 @@ const missing = [
 const root = createRoot(document.getElementById("root"));
 
 if (missing.length > 0) {
+  // Show a helpful message instead of loading a broken app.
   root.render(
     <div className="page page-narrow">
       <h1>Missing Supabase settings</h1>

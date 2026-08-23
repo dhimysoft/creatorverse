@@ -1,4 +1,4 @@
-// Homepage: loads every creator and shows them as cards.
+// Homepage that loads and displays all creators.
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -13,13 +13,12 @@ export default function ShowCreators() {
 
   // Load creators from Supabase when the page opens.
   useEffect(() => {
-    // useEffect cannot be async itself, so the function goes inside it.
+    // The async function loads the creator data.
     async function getCreators() {
       const { data, error: fetchError } = await supabase
         .from("creators")
         .select("*")
-
-        // Newest first, so a creator you just added shows at the top.
+        // Show the newest creator first.
         .order("created_at", { ascending: false });
 
       if (fetchError) {
@@ -46,7 +45,7 @@ export default function ShowCreators() {
         </p>
 
         <div className="hero-actions">
-          {/* Jumps down to the grid below. */}
+          {/* Moves down to the creator cards. */}
           <a className="btn btn-primary" href="#creators">
             <Icon name="grid" size={17} />
             View all creators
@@ -70,8 +69,7 @@ export default function ShowCreators() {
           )}
         </div>
 
-        {/* Placeholder cards while the data loads, so the page does not look
-            broken for a second. */}
+        {/* Show placeholder cards while the data is loading. */}
         {loading && (
           <section className="creator-grid">
             {[0, 1, 2].map((n) => (
@@ -84,7 +82,7 @@ export default function ShowCreators() {
           <p className="alert alert-error">Could not load creators: {error}</p>
         )}
 
-        {/* Empty state, shown only when there are really no creators yet. */}
+        {/* Show this message when no creators have been added yet. */}
         {!loading && !error && creators.length === 0 && (
           <div className="state state-empty">
             <h3>No creators yet</h3>
@@ -100,7 +98,7 @@ export default function ShowCreators() {
           </div>
         )}
 
-        {/* Show one card for each creator. */}
+        {/* Create one card for every creator in the database. */}
         {!loading && !error && creators.length > 0 && (
           <section className="creator-grid">
             {creators.map((creator) => (

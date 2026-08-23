@@ -15,7 +15,7 @@ export default function EditCreator() {
   const [error, setError] = useState("");
   const [deleting, setDeleting] = useState(false);
 
-  // Load the creator first so the form opens already filled in.
+  // Load the creator's saved details so the form can be filled in.
   useEffect(() => {
     async function getCreator() {
       const { data, error: fetchError } = await supabase
@@ -39,21 +39,20 @@ export default function EditCreator() {
   }, [id]);
 
   async function handleUpdate(values) {
+    // Update only the creator selected in the URL.
     const { error: updateError } = await supabase
       .from("creators")
       .update(values)
-
-      // Without .eq this would update every row in the table.
       .eq("id", id);
 
     if (updateError) throw new Error(updateError.message);
 
-    // Back to the details page to see the change.
+    // Return to the details page after saving.
     navigate(`/creator/${id}`);
   }
 
   async function handleDelete() {
-    // Ask first, since deleting cannot be undone.
+    // Ask for confirmation because deleting cannot be undone.
     const confirmed = window.confirm(
       `Delete ${creator.name}? This cannot be undone.`,
     );
@@ -73,7 +72,7 @@ export default function EditCreator() {
       return;
     }
 
-    // Send the user home once the creator is gone.
+    // Return home after the creator is deleted.
     navigate("/");
   }
 
@@ -109,7 +108,7 @@ export default function EditCreator() {
 
       <p className="page-lead">Update the details for {creator.name}.</p>
 
-      {/* initialValues fills the form with the creator's current details. */}
+      {/* Fill the form with the creator's current details. */}
       <CreatorForm
         initialValues={creator}
         submitLabel="Save changes"
@@ -117,8 +116,7 @@ export default function EditCreator() {
         onSubmit={handleUpdate}
       />
 
-      {/* Step 9: the delete button lives on the edit page. I kept it away
-          from Save so it is harder to hit by accident. */}
+      {/* Step 9: the delete button is on the edit page. */}
       <section className="danger-zone">
         <h2>Delete this creator</h2>
 

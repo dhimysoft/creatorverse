@@ -1,4 +1,4 @@
-// Wraps every page with the navbar and footer.
+// Provides the shared layout for every page.
 
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
@@ -8,7 +8,7 @@ export default function Layout() {
     <div className="app">
       <Navbar />
 
-      {/* The page that matches the current URL renders here. */}
+      {/* Renders the page that matches the current URL. */}
       <Outlet />
 
       <footer className="site-footer">

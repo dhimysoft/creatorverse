@@ -1,4 +1,4 @@
-// 404 page for any URL that does not match a route.
+// Shown when a user visits a URL that does not exist in the app.
 
 import { Link } from "react-router-dom";
 import Icon from "../components/Icon";

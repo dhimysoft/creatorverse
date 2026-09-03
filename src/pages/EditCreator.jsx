@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../client";
+import { describeError } from "../errorMessage";
 import CreatorForm from "../components/CreatorForm";
 import Icon from "../components/Icon";
 
@@ -25,7 +26,7 @@ export default function EditCreator() {
         .maybeSingle();
 
       if (fetchError) {
-        setError(fetchError.message);
+        setError(describeError(fetchError));
       } else if (!data) {
         setError("That creator does not exist.");
       } else {
@@ -67,7 +68,7 @@ export default function EditCreator() {
       .eq("id", id);
 
     if (deleteError) {
-      setError(deleteError.message);
+      setError(describeError(deleteError));
       setDeleting(false);
       return;
     }

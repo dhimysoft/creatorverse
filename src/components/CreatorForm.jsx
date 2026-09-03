@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { describeError } from "../errorMessage";
 
 export default function CreatorForm({
   initialValues,
@@ -47,7 +48,7 @@ export default function CreatorForm({
       });
     } catch (submitError) {
       // Keep the form information if saving fails.
-      setError(submitError.message || "Something went wrong. Please try again.");
+      setError(describeError(submitError));
       setSaving(false);
     }
   }

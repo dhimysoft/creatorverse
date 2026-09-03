@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../client";
+import { describeError } from "../errorMessage";
 import CreatorCard from "../components/CreatorCard";
 import Icon from "../components/Icon";
 
@@ -22,7 +23,7 @@ export default function ShowCreators() {
         .order("created_at", { ascending: false });
 
       if (fetchError) {
-        setError(fetchError.message);
+        setError(describeError(fetchError));
       } else {
         setCreators(data ?? []);
       }
@@ -79,7 +80,7 @@ export default function ShowCreators() {
         )}
 
         {!loading && error && (
-          <p className="alert alert-error">Could not load creators: {error}</p>
+          <p className="alert alert-error">{error}</p>
         )}
 
         {/* Show this message when no creators have been added yet. */}

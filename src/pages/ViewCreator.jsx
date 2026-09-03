@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../client";
+import { describeError } from "../errorMessage";
 import Icon from "../components/Icon";
 
 export default function ViewCreator() {
@@ -26,7 +27,7 @@ export default function ViewCreator() {
         .maybeSingle();
 
       if (fetchError) {
-        setError(fetchError.message);
+        setError(describeError(fetchError));
       } else if (!data) {
         setError("That creator does not exist.");
       } else {
@@ -55,7 +56,7 @@ export default function ViewCreator() {
       .eq("id", id);
 
     if (deleteError) {
-      setError(deleteError.message);
+      setError(describeError(deleteError));
       setDeleting(false);
       return;
     }

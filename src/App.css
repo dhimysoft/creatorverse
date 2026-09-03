@@ -536,3 +536,43 @@
 .creator-form-skeleton {
   min-height: 520px;
 }
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* Visible keyboard focus.
+   Without this, someone navigating by Tab has no idea where they are — the
+   browser's default ring is nearly invisible against this dark background.
+   :focus-visible is used instead of :focus so the ring appears for keyboard
+   users but not on every mouse click. */
+/* The .field rules above already give inputs a blue glow on focus, but they set
+   outline: none and are more specific than a bare "input:focus-visible", so the
+   keyboard ring has to be written at matching specificity to land. Links and
+   buttons had no focus styling at all before this. */
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible,
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: 3px solid var(--cyan-300);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Respect the operating system's "reduce motion" setting.
+   Some people get motion sickness or migraines from movement on screen, and
+   both macOS and Windows expose a system toggle for it. The card hover lift and
+   the loading skeleton's pulse are decorative, so they are switched off here.
+   Everything stays fully usable — only the movement stops. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -112,7 +112,13 @@ npm install
 
 **2. Create the database**
 
-In your Supabase project, open the **SQL editor** and run, in order:
+In your Supabase project, open the **SQL editor**, paste in the whole of
+`supabase/SETUP-ALL.sql`, and press Run. That creates the `creators` table and
+adds the five sample creators in one step. It is safe to run more than once —
+the table is only created if missing, and the sample data is only inserted when
+the table is empty.
+
+If you prefer to run them separately:
 
 1. `supabase/schema.sql` — creates the `creators` table
 2. `supabase/seed-creators.sql` — adds sample creators (optional)
